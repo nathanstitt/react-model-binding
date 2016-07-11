@@ -125,6 +125,12 @@ If given, a method that will be called whenever an event fires.  If this is impl
 
 ```
 
-#### onAttributeBind(name, previousObject)
+#### onAttributeBind(events, name, previousObject)
 
-Will be called whenever an object is bound, either when it's initially configured or if it's changed.  If called during initial setup, then previousObject will be null.
+Will be called whenever an object is bound, either when it's initially configured or when changed.
+
+The `events` argument is a reference to the internal event object.  Additional events can listened for by calling `events.listenTo(<event name>, callbackFunction)`   Event bindings added in this way will be automatically removed when the component unmounts or a different object is bound.
+
+`name` is the property name of the object, as given in `dataBindings`
+
+`previousObject` argument will be null when called during initial setup, otherwise refers to what was the previous value.  **Note**: There is no need to unbind events that may have been established on `previousObject` during previous calls to `onAttributeBind`, the mixin will have already done so before calling `onAttributeBind`.

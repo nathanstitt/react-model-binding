@@ -52,7 +52,7 @@ ReactEventBinding.prototype.rebindAttr = function(name, attr, events, options) {
         this.setComponentState(attr);
     }
     if (isFunction(this.component.onAttributeBind)){
-        this.component.onAttributeBind(name, prevAttr);
+        this.component.onAttributeBind(this, name, prevAttr);
     }
 };
 
