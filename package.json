@@ -1,0 +1,65 @@
+{
+  "name": "react-model-binding",
+  "version": "0.0.1",
+  "description": "Bind React Components to backboney models/collections",
+  "main": "react-model-binding.js",
+  "scripts": {
+    "test": "jest",
+    "test-debug": "node-debug node_modules/jest-cli/bin/jest.js -i",
+    "test-watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nathanstitt/react-model-binding.git"
+  },
+  "keywords": [
+    "react", "events", "backbone", "ampersand"
+  ],
+  "author": "Nathan Stitt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nathanstitt/react-model-binding/issues"
+  },
+  "peerDependencies": {
+    "react": ">=0.14.2",
+    "react-dom": ">=0.14.2",
+    "lodash": "^4.0"
+  },
+  "homepage": "https://github.com/nathanstitt/react-model-binding#readme",
+  "devDependencies": {
+    "ampersand-state": "^5.0.2",
+    "babel-jest": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "jest-cli": "^13.0",
+    "lodash": "^4.0",
+    "react": ">=0.14.2",
+    "react-addons-test-utils": ">=0.14.2",
+    "react-dom": ">=0.14.2"
+  },
+  "jest": {
+    "notify": true,
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testDirectoryName": "tests",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/fixtures/"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/react-model-binding.js",
+      "<rootDir>/fixtures/",
+      "<rootDir>/node_modules/ampersand-state/",
+      "<rootDir>/node_modules/jest-util/",
+      "<rootDir>/node_modules/ampersand-events/",
+      "<rootDir>/node_modules/react/",
+      "<rootDir>/node_modules/lodash/",
+      "<rootDir>/node_modules/react-dom/",
+      "<rootDir>/node_modules/react-addons-test-utils/"
+    ]
+  },
+  "dependencies": {
+    "ampersand-events": "^2.0.2"
+  }
+}
