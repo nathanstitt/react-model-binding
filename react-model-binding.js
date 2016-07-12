@@ -8,17 +8,16 @@ var isFunction = require('lodash/isFunction');
 var warn = global.console ? global.console.warn : function(){};
 var DEFAULT_PROP_BINDINGS = ['model', 'collection'];
 
-function ReactEventBinding(component, bindings){
+function ReactEventBinding(component){
     this.component = component;
     this.attrs = {};
-    this.rebind(clone(bindings), {silent: true});
 }
 
 ReactEventBinding.prototype.componentName = function() {
     return this.component.constructor.displayName;
 };
 
-ReactEventBinding.prototype.rebind = function(bindings, options){
+ReactEventBinding.prototype.bindEvents = function(bindings, options){
     if (options == null) { options = {}; }
     var customEvents = result(this.component, 'bindEvents', {});
     for (var name in bindings) {
@@ -28,8 +27,6 @@ ReactEventBinding.prototype.rebind = function(bindings, options){
         }
     }
 };
-
-
 
 ReactEventBinding.prototype.rebindAttr = function(name, attr, events, options) {
     if (!attr) {
@@ -56,7 +53,6 @@ ReactEventBinding.prototype.rebindAttr = function(name, attr, events, options) {
     }
 };
 
-
 ReactEventBinding.prototype.destroy = function() {
     this.stopListening();
 };
@@ -71,7 +67,6 @@ ReactEventBinding.prototype.setComponentState = function() {
         this.component.forceUpdate();
     }
 };
-
 
 Events.createEmitter(ReactEventBinding.prototype);
 
@@ -114,19 +109,19 @@ var ReactEventBindingMixin = {
     getInitialState: function(){
         var bindings = readBindings(this, this.props);
         if (!isEmpty(bindings)){
-            this._dataBindings = new ReactEventBinding(this, bindings);
+            this._dataBindings = new ReactEventBinding(this);
+            this._dataBindings.bindEvents(bindings, {silent: true});
         }
         return {};
     },
 
     componentWillReceiveProps: function(nextProps){
-        var newBindings = readBindings(this, nextProps);
-        if (!isEmpty(newBindings)){
-            if (this._dataBindings){
-                this._dataBindings.rebind(newBindings);
-            } else {
-                this._dataBindings = new ReactEventBinding(this, newBindings);
+        var bindings = readBindings(this, nextProps);
+        if (!isEmpty(bindings)){
+            if (!this._dataBindings){
+                this._dataBindings = new ReactEventBinding(this);
             }
+            this._dataBindings.bindEvents(bindings);
         }
     },
 
@@ -136,6 +131,7 @@ var ReactEventBindingMixin = {
             delete this._dataBindings;
         }
     }
+
 };
 
 
