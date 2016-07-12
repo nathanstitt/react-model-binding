@@ -1,6 +1,6 @@
 {
   "name": "react-model-binding",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Bind React Components to backboney models/collections",
   "main": "react-model-binding.js",
   "scripts": {
@@ -13,7 +13,10 @@
     "url": "git+ssh://git@github.com/nathanstitt/react-model-binding.git"
   },
   "keywords": [
-    "react", "events", "backbone", "ampersand"
+    "react",
+    "events",
+    "backbone",
+    "ampersand"
   ],
   "author": "Nathan Stitt",
   "license": "MIT",
