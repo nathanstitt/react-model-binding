@@ -86,7 +86,7 @@ function configureGetter(comp, name){
 // binds any "model" or "collection" props, combined with any that
 // are specified by the components "dataBindings" property
 function readBindings(comp, newProps) {
-    var bindings = clone(comp.dataBindings) || {};
+    var bindings = clone(result(comp, 'dataBindings')) || {};
     DEFAULT_PROP_BINDINGS.forEach(function(prop){
         if (comp.props[prop]){
             bindings[prop] = (bindings[prop] || 'props');
