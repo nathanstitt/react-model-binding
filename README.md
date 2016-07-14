@@ -88,7 +88,7 @@ Events to listen for.  By default objects will listen for the `change` event, an
         foo: 'props',
         collection: function(){ new Collection(); },
         bar: function(){ new Model(); }
-    }
+    },
     bindEvents: {
         foo: 'change:name change:title loading',  // will ONLY listen for changes to name & title, and the "loading" event
         // bar is not mentioned so it will listen to 'change'
@@ -135,10 +135,10 @@ If given, a method that will be called whenever an event fires.  If this is impl
     },
     modelBindings: {
         person: 'props'
-    }
+    },
     setModelState: function(){
         if ( @props.isObservingUpdates ) {  this.forceUpdate();  }
-    }
+    },
     render: function(){
         // somewhat contrived, but imagine that calculating
         // climateChangeImpact can only be done on-the-fly and is an expensive computation
