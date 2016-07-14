@@ -75,4 +75,16 @@ describe('ReactModelBinding', function() {
         });
     });
 
+    it('can rebind to new objects', function(){
+        this.component.onAttributeBind = jest.fn();
+        this.component.modelBindings.reset({
+            person: new Person({firstName: 'Dianne', lastName: 'Smith'})
+        });
+        return deferedRender( () => {
+            expect(this.component.onAttributeBind).toBeCalled();
+            expect(this.dom.textContent).toContain('Dianne Smith');
+
+        });
+
+    });
 });

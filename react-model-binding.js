@@ -17,18 +17,16 @@ ReactEventBinding.prototype.componentName = function() {
     return this.component.constructor.displayName;
 };
 
-ReactEventBinding.prototype.bindEvents = function(bindings, options){
-    if (options == null) { options = {}; }
-    var customEvents = result(this.component, 'bindEvents', {});
+ReactEventBinding.prototype.configure = function(bindings, options){
     for (var name in bindings) {
-        var state = bindings[name];
-        if (state !== false) {
-            this.rebindAttr(name, state, customEvents[name], options);
+        var attr = bindings[name];
+        if (attr !== false) {
+            this.bindAttr(name, attr, options);
         }
     }
 };
 
-ReactEventBinding.prototype.rebindAttr = function(name, attr, events, options) {
+ReactEventBinding.prototype.bindAttr = function(name, attr, options) {
     if (!attr) {
         warn(name + " is not set on " + (this.componentName()));
         return;
@@ -36,6 +34,9 @@ ReactEventBinding.prototype.rebindAttr = function(name, attr, events, options) {
     var prevAttr = this.attrs[name];
     if (prevAttr === attr) { return; }
 
+    if (options == null) { options = {}; }
+    var customEvents = result(this.component, 'bindEvents', {});
+    var events = customEvents[name];
     if (!events){
         events = (name === 'collection' || attr.isCollection) ? 'add remove reset' : 'change';
     }
@@ -68,6 +69,14 @@ ReactEventBinding.prototype.setComponentState = function() {
     }
 };
 
+ReactEventBinding.prototype.reset = function(newAttrs, options) {
+    for (var name in newAttrs) {
+        if (this.attrs[name]){
+            this.bindAttr(name, newAttrs[name], options);
+        }
+    }
+};
+
 Events.createEmitter(ReactEventBinding.prototype);
 
 
@@ -77,22 +86,22 @@ function configureGetter(comp, name){
         Object.defineProperty(comp.constructor.prototype, name, {
             configurable: true, enumerable: true,
             get: function(){
-                return this._dataBindings.attrs[name];
+                return this.modelBindings.attrs[name];
             }
         });
     }
 }
 
 // binds any "model" or "collection" props, combined with any that
-// are specified by the components "dataBindings" property
+// are specified by the components "modelBindings" property
 function readBindings(comp, newProps) {
-    var bindings = clone(result(comp, 'dataBindings')) || {};
+    var bindings = clone(result(comp, 'modelBindings')) || {};
     DEFAULT_PROP_BINDINGS.forEach(function(prop){
         if (comp.props[prop]){
             bindings[prop] = (bindings[prop] || 'props');
         }
     });
-    return mapValues(bindings, function(value, name) {
+    bindings = mapValues(bindings, function(value, name) {
         configureGetter(comp, name);
         if (isFunction(value)){
             return value.call(comp);
@@ -102,33 +111,31 @@ function readBindings(comp, newProps) {
             return value;
         }
     });
+    if (!isEmpty(bindings)){
+        comp.modelBindings = new ReactEventBinding(comp);
+        comp.modelBindings.configure(bindings, {silent: true});
+    }
 }
 
 var ReactEventBindingMixin = {
 
     getInitialState: function(){
-        var bindings = readBindings(this, this.props);
-        if (!isEmpty(bindings)){
-            this._dataBindings = new ReactEventBinding(this);
-            this._dataBindings.bindEvents(bindings, {silent: true});
-        }
+        readBindings(this, this.props);
         return {};
     },
 
     componentWillReceiveProps: function(nextProps){
-        var bindings = readBindings(this, nextProps);
-        if (!isEmpty(bindings)){
-            if (!this._dataBindings){
-                this._dataBindings = new ReactEventBinding(this);
-            }
-            this._dataBindings.bindEvents(bindings);
+        if (this.modelBindings){
+            this.modelBindings.reset(nextProps);
+        } else {
+            readBindings(this, nextProps);
         }
     },
 
     componentWillUnmount: function(){
-        if (this._dataBindings){
-            this._dataBindings.destroy();
-            delete this._dataBindings;
+        if (this.modelBindings){
+            this.modelBindings.destroy();
+            delete this.modelBindings;
         }
     }
 

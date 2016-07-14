@@ -17,8 +17,7 @@ var Food   = require('models/food');
 var ModelBinding = require('react-model-binding');
 
 // Pairing uses the ModelBinding mixin to access objects and update when they emit events
-// It has two objects, food is passed in via props, and person is created the mixin is initialized
-// as part of the 'getInitialState' lifecycle method
+// It has two objects, food is passed in via props, and person is created when the mixin is initialized
 var Pairing = React.createClass({
     mixins: [ModelBinding],
     propTypes: {
@@ -35,7 +34,7 @@ var Pairing = React.createClass({
                             // person will default to listening for 'change'
     },
     render: function () {
-        // `dataBindings` above allow us to access `food` and `person` from `this`
+        // the `dataBindings` definition above allow access to `food` and `person` from `this`
         return (
             <div>{this.person.name} eats {this.food.name} with a {this.person.utensil}</div>
         );
@@ -81,7 +80,7 @@ If not given, dataBindings will be created for any props named "model" or "colle
 
 #### bindEvents
 
-Events to listen for.  By default objects will listen for the `change` event, and 'collections' will listen for `add`, `remove`, and `reset`.  Since ReactModelBinding attempts to be tool agnostic, Collections can only be identified by an object with name of "collection or that has an `isCollection` property.
+Events to listen for.  By default objects will listen for the `change` event, and 'collections' will listen for `add`, `remove`, and `reset`.  Since ReactModelBinding attempts to be tool agnostic, objects are assumed to be a collection if they are named "collection or have an `isCollection` property.
 
 **Example:**
 ```javascript
@@ -101,19 +100,19 @@ Events to listen for.  By default objects will listen for the `change` event, an
 
 If given, a method that will be called whenever an event fires.  If this is implemented, it is responsible for triggering the change on the component via `setState` or `forceUpdate`.  If `setDataState` is not present, `forceUpdate` will be called on the component whenever a listened to event occurs.
 
- **Note:**  Using this method isn't very "Reacty". Ideally you should allow events to fire and deal with the state as it is during render.   The only really valid use-case for `setDataState` is to prevent a possibly expensive computation from occurring during render.
+ **Note:**  Using this method isn't very "Reacty". Ideally you should allow events to fire and deal with the state as it is during render.   The only really valid use-case for `setDataState` is to prevent a possibly expensive computation from occurring during render.  And even that is fairly weak, ideally you could just prevent the model from firing the event in the first place.
 
 
 **Example:**
 ```javascript
+    propTypes: {
+        isObservingUpdates: React.PropTypes.bool
+    },
     dataBindings: {
         person: 'props'
     }
     setDataState: function(){
-        // only bother re-rendering if somethings out of component scope is different
-        if ( GLOBAL_TEMP_CHANGED_HAS_CHANGED() ) {
-            this.forceUpdate();
-        }
+        if ( @props.isObservingUpdates ) {  this.forceUpdate();  }
     }
     render: function(){
         // somewhat contrived, but imagine that calculating

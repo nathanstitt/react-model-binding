@@ -3,7 +3,7 @@ var ModelBinding = require('../react-model-binding');
 
 var ComponentWithBindings = React.createClass({
     mixins: [ModelBinding],
-    dataBindings: {
+    modelBindings: {
         person: 'props'
     },
     bindEvents: { },
