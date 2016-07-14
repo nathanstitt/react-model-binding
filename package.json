@@ -1,6 +1,6 @@
 {
   "name": "react-model-binding",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Bind React Components to backboney models/collections",
   "main": "react-model-binding.js",
   "scripts": {
