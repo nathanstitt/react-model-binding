@@ -10,7 +10,7 @@ var DEFAULT_PROP_BINDINGS = ['model', 'collection'];
 
 function ReactEventBinding(component){
     this.component = component;
-    this.attrs = {};
+    this.models = {};
 }
 
 ReactEventBinding.prototype.componentName = function() {
@@ -19,38 +19,38 @@ ReactEventBinding.prototype.componentName = function() {
 
 ReactEventBinding.prototype.configure = function(bindings, options){
     for (var name in bindings) {
-        var attr = bindings[name];
-        if (attr !== false) {
-            this.bindAttr(name, attr, options);
+        var model = bindings[name];
+        if (model !== false) {
+            this.bindModel(name, model, options);
         }
     }
 };
 
-ReactEventBinding.prototype.bindAttr = function(name, attr, options) {
-    if (!attr) {
+ReactEventBinding.prototype.bindModel = function(name, model, options) {
+    if (!model) {
         warn(name + " is not set on " + (this.componentName()));
         return;
     }
-    var prevAttr = this.attrs[name];
-    if (prevAttr === attr) { return; }
+    var prevModel = this.models[name];
+    if (prevModel === model) { return; }
 
     if (options == null) { options = {}; }
     var customEvents = result(this.component, 'bindEvents', {});
     var events = customEvents[name];
     if (!events){
-        events = (name === 'collection' || attr.isCollection) ? 'add remove reset' : 'change';
+        events = (name === 'collection' || model.isCollection) ? 'add remove reset' : 'change';
     }
-    if (prevAttr){
-        this.stopListening(prevAttr);
+    if (prevModel){
+        this.stopListening(prevModel);
     }
-    this.attrs[name] = attr;
+    this.models[name] = model;
 
-    this.listenTo(attr, events, this.setComponentState);
+    this.listenTo(model, events, this.setComponentState);
     if (!options.silent) {
-        this.setComponentState(attr);
+        this.setComponentState(model);
     }
-    if (isFunction(this.component.onAttributeBind)){
-        this.component.onAttributeBind(this, name, prevAttr);
+    if (isFunction(this.component.onModelBind)){
+        this.component.onModelBind(this, model, name, prevModel);
     }
 };
 
@@ -69,10 +69,10 @@ ReactEventBinding.prototype.setComponentState = function() {
     }
 };
 
-ReactEventBinding.prototype.reset = function(newAttrs, options) {
-    for (var name in newAttrs) {
-        if (this.attrs[name]){
-            this.bindAttr(name, newAttrs[name], options);
+ReactEventBinding.prototype.reset = function(newModels, options) {
+    for (var name in newModels) {
+        if (this.models[name]){
+            this.bindModel(name, newModels[name], options);
         }
     }
 };
@@ -86,7 +86,7 @@ function configureGetter(comp, name){
         Object.defineProperty(comp.constructor.prototype, name, {
             configurable: true, enumerable: true,
             get: function(){
-                return this.modelBindings.attrs[name];
+                return this.modelBindings.models[name];
             }
         });
     }
