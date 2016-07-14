@@ -52,13 +52,13 @@ describe('ReactModelBinding', function() {
     });
 
     it('rebinds when model is changed', function(){
-        this.component.onAttributeBind = jest.fn();
+        this.component.onModelBind = jest.fn();
         this.parent.setState({ person: new Person({firstName: 'John', lastName: 'Smith'}) });
         return deferedRender( () => {
             expect(this.component).toBe( this.parent.refs.child );
-            expect(this.component.onAttributeBind).toBeDefined();
+            expect(this.component.onModelBind).toBeDefined();
             expect(this.dom.textContent).toContain('John Smith');
-            expect(this.component.onAttributeBind).toBeCalled();
+            expect(this.component.onModelBind).toBeCalled();
             // test that the component isn't still listening to the old model
             this.person.firstName = 'Tom';
             expect(this.dom.textContent).not.toContain('Tom');
@@ -76,12 +76,12 @@ describe('ReactModelBinding', function() {
     });
 
     it('can rebind to new objects', function(){
-        this.component.onAttributeBind = jest.fn();
+        this.component.onModelBind = jest.fn();
         this.component.modelBindings.reset({
             person: new Person({firstName: 'Dianne', lastName: 'Smith'})
         });
         return deferedRender( () => {
-            expect(this.component.onAttributeBind).toBeCalled();
+            expect(this.component.onModelBind).toBeCalled();
             expect(this.dom.textContent).toContain('Dianne Smith');
 
         });
