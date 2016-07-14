@@ -65,12 +65,12 @@ describe('ReactModelBinding', function() {
         });
     });
 
-    it('calls setDataState', function(){
-        this.component.setDataState = jest.fn();
+    it('calls setModelState', function(){
+        this.component.setModelState = jest.fn();
         expect(this.dom.textContent).not.toContain('John');
         this.person.firstName = 'John';
         return deferedRender( () => {
-            expect(this.component.setDataState).toBeCalled();
+            expect(this.component.setModelState).toBeCalled();
             expect(this.dom.textContent).not.toContain('John');
         });
     });

@@ -62,8 +62,8 @@ ReactEventBinding.prototype.setComponentState = function() {
     if (!this.component.isMounted()) {
         return;
     }
-    if (isFunction(this.component.setDataState)) {
-        this.component.setDataState.apply(this.component, arguments);
+    if (isFunction(this.component.setModelState)) {
+        this.component.setModelState.apply(this.component, arguments);
     } else {
         this.component.forceUpdate();
     }
