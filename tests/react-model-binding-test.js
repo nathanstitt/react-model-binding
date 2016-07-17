@@ -52,16 +52,32 @@ describe('ReactModelBinding', function() {
     });
 
     it('rebinds when model is changed', function(){
-        this.component.onModelBind = jest.fn();
         this.parent.setState({ person: new Person({firstName: 'John', lastName: 'Smith'}) });
         return deferedRender( () => {
             expect(this.component).toBe( this.parent.refs.child );
-            expect(this.component.onModelBind).toBeDefined();
             expect(this.dom.textContent).toContain('John Smith');
-            expect(this.component.onModelBind).toBeCalled();
             // test that the component isn't still listening to the old model
             this.person.firstName = 'Tom';
             expect(this.dom.textContent).not.toContain('Tom');
+        });
+    });
+
+    it('calls onModelUnbind', function(){
+        this.component.onModelUnbind = jest.fn();
+        this.parent.setState({ person: new Person({firstName: 'Elle', lastName: 'Smith'}) });
+        return deferedRender( () => {
+            expect(this.component.onModelUnbind).toBeDefined();
+            expect(this.component.onModelUnbind).toBeCalledWith(this.person, 'person');
+        });
+    });
+
+    it('calls onModelBind', function(){
+        this.component.onModelBind = jest.fn();
+        const newPerson = new Person({firstName: 'Elle', lastName: 'Smith'});
+        this.parent.setState({ person: newPerson });
+        return deferedRender( () => {
+            expect(this.component.onModelBind).toBeDefined();
+            expect(this.component.onModelBind).toBeCalledWith(newPerson, 'person');
         });
     });
 
@@ -85,6 +101,13 @@ describe('ReactModelBinding', function() {
             expect(this.dom.textContent).toContain('Dianne Smith');
 
         });
-
     });
+
+    it('can be destroyed', function(){
+        this.component.onModelUnbind = jest.fn();
+        this.component.modelBindings.destroy();
+        expect(this.component.onModelUnbind).toBeCalledWith(this.person, 'person');
+        expect(this.component.modelBindings).toEqual({person: 'props'});
+    });
+
 });

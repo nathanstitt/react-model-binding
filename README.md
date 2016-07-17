@@ -96,25 +96,34 @@ Events to listen for.  By default objects will listen for the `change` event, an
     }
 ```
 
-#### onmodelibuteBind(events, name, previousObject)
+#### onModelBind(model, name)
 
 Will be called whenever an object is bound, either when it's initially configured or when changed.
 
-The `events` argument is a reference to the internal event object.  Additional events can listened for by calling `events.listenTo(<event name>, callbackFunction)`   Event bindings added in this way will be automatically removed when the component unmounts or a different object is bound.
+`name` is the property name of the object, as given in `modelBindings`
+
+#### onModelUnbind(model, name)
+
+Will be called whenever an object has it's listeners removed, either because it's being replaced by another object (which onModelBind will be called with), or when the component is the process of being removed.
 
 `name` is the property name of the object, as given in `modelBindings`
 
-`previousObject` argument will be null when called during initial setup, otherwise refers to what was the previous value.  **Note**: There is no need to unbind events that may have been established on `previousObject` during previous calls to `onModelBind`, the mixin will have already done so before calling `onAttributeBind`.
+**Note:** There is no need to unbind events that may have been established during `onModelBind`, the mixin will unbind all event listeners that have the component as the target automatically.
 
 **Example:**
 ```javascript
     modelBindings: {
         food: function(){ new Food(); }
     },
-    onModelBind: function(events, model, name, previousObject) {
+    onModelBind: function(model, name) {
         if ('food' === name){
-            events.listenTo(model, 'change:food', this.onFoodUpdate);
+            this.modelBindings.listenTo(model, 'change:food', this.onFoodUpdate);
         }
+        GlobalModelListners.add(model);
+    },
+    onModelUnbind: function(model, name) {
+        // since the onFoodUpdate listener is part of "this" component we don't need to unbind it
+        GlobalModelListners.remove(model);
     },
     onFoodUpdate: function(){
         if( this.food.isEdible ){ this.forceUpdate(); }
