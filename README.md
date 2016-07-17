@@ -129,6 +129,9 @@ Will be called whenever an object has it's listeners removed, either because it'
         if( this.food.isEdible ){ this.forceUpdate(); }
     }
 ```
+#### destroy
+
+Removes all listeners on models/collections, firing `onModelUnbind` for each (if present).  Replaces the original `modelBindings` property of component with it's original definition.
 
 #### setModelState
 
