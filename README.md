@@ -1,5 +1,7 @@
 # react-model-binding
 
+[![Build Status](https://travis-ci.org/nathanstitt/react-model-binding.svg?branch=master)](https://travis-ci.org/nathanstitt/react-model-binding)
+
 A mixin for React classes that allows them to easily integrate with "model" and "collection" type objects. It's primary use is integrating with Backbone/Ampersand models and collections, but will also work with any object that supports listening to events via `on` and stopping via `off`.
 
 ## What does it do?
