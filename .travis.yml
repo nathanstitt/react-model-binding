@@ -1,0 +1,10 @@
+sudo: false
+language: node_js
+node_js:
+  - "5.5"
+after_failure:
+  - npm list
+script: npm run travis
+cache:
+  directories:
+    - node_modules
