@@ -121,11 +121,11 @@ Will be called whenever an object has it's listeners removed, either because it'
         if ('food' === name){
             this.modelBindings.listenTo(model, 'change:food', this.onFoodUpdate);
         }
-        GlobalModelListners.add(model);
+        GlobalModelListeners.add(model);
     },
     onModelUnbind: function(model, name) {
         // since the onFoodUpdate listener is part of "this" component we don't need to unbind it
-        GlobalModelListners.remove(model);
+        GlobalModelListeners.remove(model);
     },
     onFoodUpdate: function(){
         if( this.food.isEdible ){ this.forceUpdate(); }
