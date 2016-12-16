@@ -32,39 +32,24 @@
   "homepage": "https://github.com/nathanstitt/react-model-binding#readme",
   "devDependencies": {
     "ampersand-state": "^5.0.2",
-    "babel-eslint": "^6.1.2",
-    "babel-jest": "*",
-    "babel-preset-es2015": "*",
-    "babel-preset-react": "*",
-    "eslint": "^3.1.0",
     "eslint-plugin-react": "^5.2.2",
-    "jest-cli": "^13.0",
+    "jest-cli": "^18.0",
     "lodash": "^4.0",
     "react": ">=0.14.2",
     "react-addons-test-utils": ">=0.14.2",
     "react-dom": ">=0.14.2"
   },
   "jest": {
-    "notify": true,
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "testDirectoryName": "tests",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/fixtures/"
-    ],
-    "unmockedModulePathPatterns": [
-      "<rootDir>/react-model-binding.js",
-      "<rootDir>/fixtures/",
-      "<rootDir>/node_modules/ampersand-state/",
-      "<rootDir>/node_modules/jest-util/",
-      "<rootDir>/node_modules/ampersand-events/",
-      "<rootDir>/node_modules/react/",
-      "<rootDir>/node_modules/lodash/",
-      "<rootDir>/node_modules/react-dom/",
-      "<rootDir>/node_modules/react-addons-test-utils/"
-    ]
+      "verbose": true,
+      "notify": true,
+      "testRegex": "tests\/.*\\-test\\.(js)$",
+      "moduleFileExtensions": [
+          "js"
+      ],
+      "testPathIgnorePatterns": [
+          "/node_modules/",
+          "/fixtures/"
+      ]
   },
   "dependencies": {
     "ampersand-events": "^2.0.2"

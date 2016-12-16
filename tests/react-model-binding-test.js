@@ -7,6 +7,8 @@ var Person    = require('../fixtures/person-model');
 var TestComp  = require('../fixtures/test-component');
 var defer     = require('lodash/defer');
 
+jest.useFakeTimers()
+
 var deferedRender = function(expectations){
     var promise = new Promise( (resolve) => {
         defer( expectations );
