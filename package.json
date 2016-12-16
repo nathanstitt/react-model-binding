@@ -1,6 +1,6 @@
 {
   "name": "react-model-binding",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Bind React Components to backboney models/collections",
   "main": "react-model-binding.js",
   "scripts": {
@@ -40,16 +40,16 @@
     "react-dom": ">=0.14.2"
   },
   "jest": {
-      "verbose": true,
-      "notify": true,
-      "testRegex": "tests\/.*\\-test\\.(js)$",
-      "moduleFileExtensions": [
-          "js"
-      ],
-      "testPathIgnorePatterns": [
-          "/node_modules/",
-          "/fixtures/"
-      ]
+    "verbose": true,
+    "notify": true,
+    "testRegex": "tests/.*\\-test\\.(js)$",
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/fixtures/"
+    ]
   },
   "dependencies": {
     "ampersand-events": "^2.0.2"
