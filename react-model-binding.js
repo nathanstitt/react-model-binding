@@ -90,12 +90,11 @@ ReactEventBinding.prototype.reset = function(newModels, options) {
 
 Events.createEmitter(ReactEventBinding.prototype);
 
-
 // create a defined property unless property name already exists
 function configureGetter(comp, name){
     if (!(name in comp.constructor.prototype)){
         Object.defineProperty(comp.constructor.prototype, name, {
-            configurable: true, enumerable: true,
+            configurable: true, enumerable: false,
             get: function(){
                 return this.modelBindings.models[name];
             }
